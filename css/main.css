@@ -1,0 +1,154 @@
+/* Global Styles */
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+*::selection {
+    background-color: transparent;
+}
+
+button {
+    outline: none;
+    border: none;
+}
+
+button:active, button:focus {
+    outline: none;
+    border: none;
+}
+
+/* Utilities */
+.btn {
+    background-color: transparent;
+    transform: scale(1);
+    transition: .25s all linear;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:active {
+    transform: scale(.8);
+}
+
+.f-centralize-block-xy {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Regular Styles */
+
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+.app {
+    width: 95%;
+    height: 40vh;
+    background-color: black;
+    color: white;
+    border-radius: .5em;
+    box-shadow: 4px 4px 15px black;
+    margin: 3em auto;
+    padding: 1em;
+    gap: 3em;
+    flex-direction: column;
+    position: relative;
+}
+
+.before {
+    position: absolute;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: white;
+    z-index: 2;
+    top: 10px;
+}
+
+.before:first-child {
+    left: 10px;
+}
+
+.before:nth-child(2) {
+    left: 25px;
+}
+
+.before:nth-child(3) {
+    left: 40px;
+}
+
+.screen {
+    flex: .2;
+    width: 100%;
+    background-color: transparent;
+    text-align: right;
+    font-size: 3rem;
+    padding: 1em 0em;
+}
+
+.keys {
+    flex: .8;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+    padding: 1em;
+}
+
+.special-operators {
+    flex: .2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+    color: grey;
+    place-content: start;
+    place-items: center;
+    font-size: 1.3rem;
+}
+
+.numbers {
+    flex: .3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+    font-size: 2rem;
+}
+
+.arithmetric-operators {
+    flex: .2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 0em;
+    place-content: space-between;
+    place-items: start;
+    font-size: 1.3rem;
+}
+
+.arithmetric-operators > * {
+    grid-column: span 1;
+    grid-row: span 1;
+    width: 100%;
+    height: 100%;
+}
+
+.equality-sign {
+    background-color: orangered;
+    grid-column: 2/3;
+    grid-row: 3/-1;
+    width: 100%;
+    height: 100%;
+    padding: 1.5em;
+    color: white;
+    text-align: center;
+    border-radius: .3em;
+}
+
