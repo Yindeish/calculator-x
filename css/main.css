@@ -1,3 +1,5 @@
+/* Mobiles */
+
 /* Global Styles */
 * {
     padding: 0px;
@@ -41,6 +43,10 @@ button:active, button:focus {
     align-items: center;
 }
 
+.hide {
+    display: none;
+}
+
 /* Regular Styles */
 
 body {
@@ -49,17 +55,15 @@ body {
 }
 
 .app {
-    width: 95%;
-    height: 40vh;
     background-color: black;
     color: white;
-    border-radius: .5em;
-    box-shadow: 4px 4px 15px black;
-    margin: 3em auto;
     padding: 1em;
     gap: 3em;
     flex-direction: column;
     position: relative;
+    width: 100%;
+    height: 100vh;
+    padding-top: 2em;
 }
 
 .before {
@@ -88,34 +92,48 @@ body {
 .screen {
     flex: .2;
     width: 100%;
+    min-height: 55px;
     background-color: transparent;
+    background-color: grey;
     text-align: right;
     font-size: 3rem;
-    padding: 1em 0em;
+    padding: 0em;
+}
+
+.screen > div {
+    align-items: flex-end;
+    justify-content: end;
+    width: 100%;
+    height: 100%;
+    padding: .2em 0em;
 }
 
 .keys {
     flex: .8;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
     background-color: transparent;
-    padding: 1em;
+    display: grid;
+    grid-template-rows: 1fr 9fr;
+    grid-template-columns: 8fr 2fr;
+    gap: 2em;
 }
 
 .special-operators {
-    flex: .2;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1em;
     color: grey;
     place-content: start;
     place-items: center;
     font-size: 1.3rem;
+    grid-column: 1/-1;
+    grid-row: span 1;
+    display: grid;
+    gap: 1em;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .numbers {
-    flex: .3;
+    grid-column: span 1;
+    grid-row: span 1;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1em;
@@ -123,11 +141,12 @@ body {
 }
 
 .arithmetric-operators {
-    flex: .2;
+    grid-column: span 1;
+    grid-row: span 1;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    gap: 0em;
+    gap: 1em;
     place-content: space-between;
     place-items: start;
     font-size: 1.3rem;
@@ -138,6 +157,7 @@ body {
     grid-row: span 1;
     width: 100%;
     height: 100%;
+    font-size: 1.7rem;
 }
 
 .equality-sign {
@@ -152,3 +172,64 @@ body {
     border-radius: .3em;
 }
 
+/* Media Queries */
+
+/* Tablets */
+@media screen and  (min-width: 768px) and (max-width: 1000px) {
+    /* Regular Styles */
+    .app {
+        background-color: rgba(0, 0, 0, 0.827);
+    }
+
+    .screen > div {
+        padding: 0.5em 0em;
+    }
+
+    .keys {
+        grid-template-columns: 7fr 3fr;
+    }
+
+    .keys > div {
+        background-color: black;
+    }
+
+    .special-operators {
+        font-size: 2.3rem;
+    }
+
+    .arithmetric-operators > * {
+        font-size: 2.4rem;
+    }
+}
+
+/* Desktops */
+@media screen and  (min-width: 1001px) {
+    /* Regular Styles */
+    .app {
+        width: 50%;
+        height: 60vh;
+        margin: auto;
+        border-radius: .5em;
+        box-shadow: 4px 4px 15px black;
+        margin: 3em auto;
+    }
+
+    .special-operators {
+        grid-column: span 1;
+        grid-row: 1/-1;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+        gap: 1em;
+    }
+
+    .numbers {
+        grid-column: span 1;
+        grid-row: 1/-1;
+    }
+
+    .arithmetric-operators {
+        grid-column: span 1;
+        grid-row: 1/-1;
+    }
+}

@@ -14,18 +14,54 @@ class Calculator {
     compute() {
         let operation = this.currentResultHolder.textContent;
         
-        if( operation.indexOf('*') != -1 ) {
-           this.renderUI('*', operation);
+        // if( operation.indexOf('*') > -1 ) {
+            // console.log('multiplication');
+           this.getIndixesOfOperator('*');
+        // } else {
+            // console.log('not multiplication');
+        // }
+        // if( operation.indexOf('+') != -1 ) {
+        //     this.renderUI('+', operation);
+        // }
+        // if( operation.indexOf('-') != -1 ) {
+        //     this.renderUI('-', operation);
+        // }
+        // if( operation.indexOf('/') != -1 ) {
+        //     this.renderUI('/', operation);
+        // }
+
+
+        // console.log(operation);
+    }
+
+    getIndixesOfOperator(operator) {
+        // console.log(this.currentResultHolder.textContent)
+        const indexes = [];
+
+        // if( operator == '*' ) {
+            const operandsRegexp = /\d+/g;   
+            const operatorsRegexp = /!\d+/g;
+            console.log(this.currentResultHolder.textContent);
+            const matches = this.currentResultHolder.textContent.matchAll(operandsRegexp);
+            const matchedOperators = this.currentResultHolder.textContent.matchAll(operatorsRegexp);
+            console.log(matchedOperators);
+            for (let match of matches ) {
+                console.log(match[0]);
+                console.log(matchedOperators[match][0])
+            }
+            // console.log(regexp.exec(this.currentResultHolder.textContent));
+            
+        // }
+    }
+
+    performOperation(operator, indexes) {
+        console.log('perforoming operation' +operator+'..');
+        if( operator == '*' ) {
+            for (let match of indexes ) {
+                console.log(this.currentResultHolder.textContent[match+1]);
+            }
         }
-        if( operation.indexOf('+') != -1 ) {
-            this.renderUI('+', operation);
-        }
-        if( operation.indexOf('-') != -1 ) {
-            this.renderUI('-', operation);
-        }
-        if( operation.indexOf('/') != -1 ) {
-            this.renderUI('/', operation);
-        }
+
     }
 
     renderUI(operand, operation) {
@@ -51,8 +87,20 @@ class Calculator {
                 if( event.target.classList.contains('equality-sign') ) {
                     this.compute();
                 }
+                // Not delete and equality-sign btns
                 else {
                     this.currentResultHolder.textContent += keyContent;
+
+
+                    // if( event.target.classList.contains('arith') ) {
+                    //     console.log(`It's an arith operator`);  
+                    //     if( event.target.classList.contains('multiplication') ) {
+                    //         console.log("It's a * operation");
+                    //         this.performOperation('*');
+                    //     }
+                    // } else {
+                    //     console.log(`It's not an arith operator`);
+                    // }
                 }
             })
         })
@@ -62,3 +110,5 @@ class Calculator {
 
 const calculatorApp = new Calculator();
 calculatorApp.run();
+
+
