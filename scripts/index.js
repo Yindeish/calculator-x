@@ -39,7 +39,7 @@ class Calculator {
         // Getting the operand after an operator ...
         const operandAfterOperatorRegExp = /[\W](\d{1,})/;
         const operandAfterOperator = this.operationHolder.textContent.match(operandAfterOperatorRegExp);; 
-        this.followingOperand = operandAfterOperator[1];
+        this.followingOperand = parseFloat(operandAfterOperator[1]);
 
         const operatorsRegExp = /\W/;
         const foundAnOperator =  this.operationHolder.textContent.match(operatorsRegExp);
@@ -64,13 +64,13 @@ class Calculator {
             const newFollowingOperand = reversedOperation.match(newFollowingOperandRegExp);
 
             // Reversed the matched operand back and coereced it to a string
-            this.followingOperand = [...newFollowingOperand[0]].reverse().join('');
+            this.followingOperand = parseFloat([...newFollowingOperand[0]].reverse().join(''));
 
             // Updated the previous value to the current result
-            this.precedingOperand = this.result;
+            this.precedingOperand = parseFloat(this.result);
 
             const anotherOperator = this.getAnotherOperator(reversedOperation);
-            console.log(this.precedingOperand, anotherOperator[0])
+            console.log(this.precedingOperand, anotherOperator[0], 'anotheroperator', this.followingOperand)
 
             this.operate(anotherOperator);
 
@@ -104,10 +104,21 @@ class Calculator {
     operate(operator) {
         operator == '/' ? this.result = this.precedingOperand / this.followingOperand : this.result = this.result;
         operator == '*' ? this.result = this.precedingOperand * this.followingOperand : this.result = this.result;
-        operator == '+' ? this.result = this.precedingOperand + this.followingOperand : this.result = this.result;
+        // parseFloat() was used as the + may concatenate the operands but other operators coerce the operands to numbers
+        operator == '+' ? this.result = parseFloat(this.precedingOperand) + parseFloat(this.followingOperand) : this.result = this.result;
         operator == '-' ? this.result = this.precedingOperand - this.followingOperand : this.result = this.result;
 
         this.resultHolder.textContent = this.result;
+    }
+
+    renderResult() {
+
+        // this.updateApp();
+
+        this.operationHolder.textContent = parseFloat(this.result);
+
+        this.result = '';
+        this.updateApp();
     }
 
     run() {
@@ -127,7 +138,8 @@ class Calculator {
 
                 // Ensuring that the equality-sign content is not rendered in the screen when clicked
                 if( btnClasses.contains('equality-sign') ) {
-                    this.compute();
+                    
+                    this.renderResult();
                 }
 
                 // Ensuring that the ac btn content is not rendered in the screen when clicked
@@ -155,6 +167,7 @@ class Calculator {
 
                     // Updating the the app before appending operands and computing the result
                     this.updateApp()
+
                     // Appending the current operand to the operation
                     this.operationHolder.textContent += keyContent;
 
@@ -172,8 +185,6 @@ class Calculator {
                     const previousOperator = this.previousValue;
                     const previousOperatorIsThisOperator = previousOperator == currentOperator;
                     
-                    // const previousValue = this.operationHolder.textContent.charAt(this.operationHolder.textContent.length);
-                    // console.log(this.previousValue + 'previousValue')
                     const previousValueWasAnOperator = this.previousValue == '/' || 
                         this.previousValue == '*' ||
                         this.previousValue == '+' ||
@@ -181,8 +192,6 @@ class Calculator {
 
                     // Avoiding immediate dupliaction of operators
                     if( previousValueWasAnOperator || previousOperatorIsThisOperator ) {
-                        console.log('previousValueWasAnOperator || previousOperatorIsThisOperator')
-                        console.log(this.previousValue)
                         return;
                     }
                  

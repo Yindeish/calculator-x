@@ -103,16 +103,17 @@ body {
     align-items: flex-end;
     justify-content: end;
     width: 100%;
-    flex: .49;
     padding: .2em 0em;
 }
 
 .operation-holder {
     border-bottom: 2px solid black;
+    flex: .5;
 }
 
 .result-holder {
     font-size: 1.6rem;
+    flex: .3;
 }
 
 .keys {
@@ -214,11 +215,21 @@ body {
     /* Regular Styles */
     .app {
         width: 50%;
-        height: 60vh;
+        height: 65vh;
         margin: auto;
         border-radius: .5em;
         box-shadow: 4px 4px 15px black;
         margin: 3em auto;
+    }
+
+    .screen {
+        height: fit-content;
+        min-height: 100px;
+    }
+
+    .operation-holder {
+        font-size: 2.5rem;
+        padding: .1em;
     }
 
     .special-operators {
