@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
     <link rel="stylesheet" href="./css/main.css">
-    <script src="./scripts/index.js" defer></script>
+    <!-- <script src="./scripts/index.js" defer></script> -->
 </head>
 <body class="f-centralize-block-xy">
     <div class="app f-centralize-block-xy">
         <span class="before"></span>
         <span class="before"></span>
         <span class="before"></span>
-        <div class="screen">
-            <div class="prior-result f-centralize-block-xy hide"></div>
-            <div class="current-result f-centralize-block-xy"></div>
+        <div class="screen f-centralize-block-xy">
+            <div id="operation-holder" class="operation-holder f-centralize-block-xy"></div>
+            <div id="result-holder" class="result-holder f-centralize-block-xy"></div>
         </div>
         <div class="keys">
             <div class="special-operators">
@@ -49,5 +49,6 @@
             </div>
         </div>
     </div>
+    <script src="./scripts/index.js"></script>
 </body>
 </html>

@@ -43,9 +43,6 @@ button:active, button:focus {
     align-items: center;
 }
 
-.hide {
-    display: none;
-}
 
 /* Regular Styles */
 
@@ -91,6 +88,8 @@ body {
 
 .screen {
     flex: .2;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     min-height: 55px;
     background-color: transparent;
@@ -104,8 +103,16 @@ body {
     align-items: flex-end;
     justify-content: end;
     width: 100%;
-    height: 100%;
+    flex: .49;
     padding: .2em 0em;
+}
+
+.operation-holder {
+    border-bottom: 2px solid black;
+}
+
+.result-holder {
+    font-size: 1.6rem;
 }
 
 .keys {

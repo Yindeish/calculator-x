@@ -1,114 +1,206 @@
+// Screen Elements
+
 class Calculator {
 
     // Screen Elements
-    priorResultHolder = document.querySelector('.prior-result');
-    currentResultHolder = document.querySelector('.current-result');
+    operationHolder = document.querySelector('.operation-holder');
+    resultHolder = document.querySelector('.result-holder');
+    // Screen Values
+    operation = null;
+    // resultDisplay = this.resultHolder.textContent;
+    previousValue = null;
+
+    // Algorithm
+    result = '';
+    precedingOperand = null;
+    folowingOperand = null;
 
     // Keys
     keys = [...document.querySelectorAll('.btn')];
 
-    // Algorithm
-    priorResult  = null;
-    currentResult = null;
+    updateApp() {
+        this.operation = this.operationHolder.textContent;
+        this.previousValue = [...this.operationHolder.textContent][this.operationHolder.textContent.length-1];
+
+        this.resultHolder.textContent = this.result;
+
+        console.log(this.resultHolder.textContent)
+    }
 
     compute() {
-        let operation = this.currentResultHolder.textContent;
-        
-        // if( operation.indexOf('*') > -1 ) {
-            // console.log('multiplication');
-           this.getIndixesOfOperator('*');
-        // } else {
-            // console.log('not multiplication');
-        // }
-        // if( operation.indexOf('+') != -1 ) {
-        //     this.renderUI('+', operation);
-        // }
-        // if( operation.indexOf('-') != -1 ) {
-        //     this.renderUI('-', operation);
-        // }
-        // if( operation.indexOf('/') != -1 ) {
-        //     this.renderUI('/', operation);
-        // }
+        this.updateApp();
+        console.log('computing..');
 
+        // Getting the operand before an operator ...
+        const operandBeforeOperatorRegExp = /(\d{1,})[\W]/;
+        const operandBeforeOperator = this.operationHolder.textContent.match(operandBeforeOperatorRegExp);; 
+        this.precedingOperand = operandBeforeOperator[1];
 
-        // console.log(operation);
-    }
+        // Getting the operand after an operator ...
+        const operandAfterOperatorRegExp = /[\W](\d{1,})/;
+        const operandAfterOperator = this.operationHolder.textContent.match(operandAfterOperatorRegExp);; 
+        this.followingOperand = operandAfterOperator[1];
 
-    getIndixesOfOperator(operator) {
-        // console.log(this.currentResultHolder.textContent)
-        const indexes = [];
+        const operatorsRegExp = /\W/;
+        const foundAnOperator =  this.operationHolder.textContent.match(operatorsRegExp);
 
-        // if( operator == '*' ) {
-            const operandsRegexp = /\d+/g;   
-            const operatorsRegexp = /!\d+/g;
-            console.log(this.currentResultHolder.textContent);
-            const matches = this.currentResultHolder.textContent.matchAll(operandsRegexp);
-            const matchedOperators = this.currentResultHolder.textContent.matchAll(operatorsRegexp);
-            console.log(matchedOperators);
-            for (let match of matches ) {
-                console.log(match[0]);
-                console.log(matchedOperators[match][0])
-            }
-            // console.log(regexp.exec(this.currentResultHolder.textContent));
-            
-        // }
-    }
+        const operatorsAreMoreThanOne = this.areOperatorsMoreThanOne();
 
-    performOperation(operator, indexes) {
-        console.log('perforoming operation' +operator+'..');
-        if( operator == '*' ) {
-            for (let match of indexes ) {
-                console.log(this.currentResultHolder.textContent[match+1]);
-            }
+        if( foundAnOperator && !operatorsAreMoreThanOne ) {
+            console.log(`there was no result`)
+
+            console.log(foundAnOperator[0])
+            this.operate(foundAnOperator[0])
+
         }
 
+        // Checking if the operands are more than two
+        if( typeof this.result == 'number' && operatorsAreMoreThanOne ) {
+            console.log(`there was result`);
+
+            // Get the new operand from the back of the operation string
+            const reversedOperation = [...this.operationHolder.textContent].reverse().join('');
+            const newFollowingOperandRegExp = /\d{1,}/;
+            const newFollowingOperand = reversedOperation.match(newFollowingOperandRegExp);
+
+            // Reversed the matched operand back and coereced it to a string
+            this.followingOperand = [...newFollowingOperand[0]].reverse().join('');
+
+            // Updated the previous value to the current result
+            this.precedingOperand = this.result;
+
+            const anotherOperator = this.getAnotherOperator(reversedOperation);
+            console.log(this.precedingOperand, anotherOperator[0])
+
+            this.operate(anotherOperator);
+
+        }
+
+        // Escaping the value of the result when it returns NaN
+        // It returns NaN when the current input is an operator, * for example,
+        this.result == 'NaN' ? this.result = '': this.result = this.result;
+        
     }
 
-    renderUI(operand, operation) {
-        const multiplicationSignIndex = operation.indexOf(operand);
-        const firstOperand  = operation.slice(0, multiplicationSignIndex);
-        const secondOperand = operation.slice(multiplicationSignIndex+1);
-        this.priorResult  = firstOperand * secondOperand;
-        this.priorResultHolder.textContent = this.priorResult;
-        this.currentResultHolder.textContent = '';
+    getAnotherOperator(hook) {
+        const anotherOperatorRegExp = /\W/;
+        const reversedOperation = hook;
+        const anotherOperator = reversedOperation.match(anotherOperatorRegExp);
+
+        return anotherOperator[0];
+    }
+
+    areOperatorsMoreThanOne() {
+        let operatorsAreMoreThanOneArray = [];
+        const operatorsAreMoreThanOneRegExp = /\W+/g;
+        const operatorsAreMoreThanOne = this.operationHolder.textContent.matchAll(operatorsAreMoreThanOneRegExp);
+        for( let matchedOperator of operatorsAreMoreThanOne ) {
+            operatorsAreMoreThanOneArray.push(matchedOperator);
+        }
+        
+        return operatorsAreMoreThanOneArray.length > 1;
+    }
+
+    operate(operator) {
+        operator == '/' ? this.result = this.precedingOperand / this.followingOperand : this.result = this.result;
+        operator == '*' ? this.result = this.precedingOperand * this.followingOperand : this.result = this.result;
+        operator == '+' ? this.result = this.precedingOperand + this.followingOperand : this.result = this.result;
+        operator == '-' ? this.result = this.precedingOperand - this.followingOperand : this.result = this.result;
+
+        this.resultHolder.textContent = this.result;
     }
 
     run() {
+        // updateing the app before running it
+        this.updateApp();
 
         this.keys.forEach(key => {
             key.addEventListener('click', event => {
                 let keyContent = event.target.textContent;
-              
-                // Ensuring that Eqaul sign and the delete btns are not rendered in the screen when clicked
-                if( event.target.classList.contains('delete-btn') ) {
+                let btnClasses = event.target.classList;
+
+                // Ensuring that the delete-btn content is not rendered in the screen when clicked
+                if( btnClasses.contains('delete-btn') ) {
                     console.log('deleted')
                     return;
                 } 
-                if( event.target.classList.contains('equality-sign') ) {
+
+                // Ensuring that the equality-sign content is not rendered in the screen when clicked
+                if( btnClasses.contains('equality-sign') ) {
                     this.compute();
                 }
-                // Not delete and equality-sign btns
-                else {
-                    this.currentResultHolder.textContent += keyContent;
 
-
-                    // if( event.target.classList.contains('arith') ) {
-                    //     console.log(`It's an arith operator`);  
-                    //     if( event.target.classList.contains('multiplication') ) {
-                    //         console.log("It's a * operation");
-                    //         this.performOperation('*');
-                    //     }
-                    // } else {
-                    //     console.log(`It's not an arith operator`);
-                    // }
+                // Ensuring that the ac btn content is not rendered in the screen when clicked
+                if( btnClasses.contains('ac') ) {
+                    console.log('ac');
                 }
+
+                // Ensuring that the pie content is not rendered in the screen when clicked
+                if( btnClasses.contains('pie') ) {
+                    console.log('pie');
+                }
+
+                // Ensuring that the power btn content is not rendered in the screen when clicked
+                if( btnClasses.contains('power') ) {
+                    console.log('power');
+                }
+
+                // Ensuring that the square-root content is not rendered in the screen when clicked
+                if( btnClasses.contains('square-root') ) {
+                    console.log('square-root');
+                }
+
+                // Checking if the curent key is a number key
+                if( btnClasses.contains('number') ) {
+
+                    // Updating the the app before appending operands and computing the result
+                    this.updateApp()
+                    // Appending the current operand to the operation
+                    this.operationHolder.textContent += keyContent;
+
+                    // Compute the result on inputting the operands
+                    this.compute(keyContent);
+                }
+
+                if( btnClasses.contains('arith') && !btnClasses.contains('equality-sign') ) {
+                    
+                    const numberRegExp  = /\d/;
+                    const operandIsThere = this.operationHolder.textContent.match(numberRegExp);
+                    const currentOperator = keyContent;
+
+                    this.updateApp()
+                    const previousOperator = this.previousValue;
+                    const previousOperatorIsThisOperator = previousOperator == currentOperator;
+                    
+                    // const previousValue = this.operationHolder.textContent.charAt(this.operationHolder.textContent.length);
+                    // console.log(this.previousValue + 'previousValue')
+                    const previousValueWasAnOperator = this.previousValue == '/' || 
+                        this.previousValue == '*' ||
+                        this.previousValue == '+' ||
+                        this.previousValue == '-';
+
+                    // Avoiding immediate dupliaction of operators
+                    if( previousValueWasAnOperator || previousOperatorIsThisOperator ) {
+                        console.log('previousValueWasAnOperator || previousOperatorIsThisOperator')
+                        console.log(this.previousValue)
+                        return;
+                    }
+                 
+                    // Confirming the existence of an operand before appending an arith operator to the operation
+                    if( operandIsThere ) {
+                        this.operationHolder.textContent += keyContent;
+                    }
+                }
+                else {
+                    return;
+                }
+                
             })
         })
     }
 
 }
+;
 
 const calculatorApp = new Calculator();
 calculatorApp.run();
-
-
