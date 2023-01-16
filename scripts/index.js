@@ -24,7 +24,6 @@ class Calculator {
 
         this.resultHolder.textContent = this.result;
 
-        console.log(this.resultHolder.textContent)
     }
 
     compute() {
@@ -46,7 +45,7 @@ class Calculator {
 
         const operatorsAreMoreThanOne = this.areOperatorsMoreThanOne();
 
-        if( foundAnOperator && !operatorsAreMoreThanOne ) {
+        if( foundAnOperator && !operatorsAreMoreThanOne || foundAnOperator ) {
             console.log(`there was no result`)
 
             console.log(foundAnOperator[0])
@@ -113,11 +112,11 @@ class Calculator {
 
     renderResult() {
 
-        // this.updateApp();
-
         this.operationHolder.textContent = parseFloat(this.result);
 
         this.result = '';
+
+        // Updating the app about changes made
         this.updateApp();
     }
 
@@ -150,6 +149,15 @@ class Calculator {
                 // Ensuring that the pie content is not rendered in the screen when clicked
                 if( btnClasses.contains('pie') ) {
                     console.log('pie');
+
+                    // Updating the the app before appending operands and computing the result
+                    this.updateApp()
+
+                    // Appending the current operand to the operation
+                    this.operationHolder.textContent += '3.142';
+
+                    // Compute the result on inputting the operands
+                    this.compute();
                 }
 
                 // Ensuring that the power btn content is not rendered in the screen when clicked
@@ -172,7 +180,7 @@ class Calculator {
                     this.operationHolder.textContent += keyContent;
 
                     // Compute the result on inputting the operands
-                    this.compute(keyContent);
+                    this.compute();
                 }
 
                 if( btnClasses.contains('arith') && !btnClasses.contains('equality-sign') ) {

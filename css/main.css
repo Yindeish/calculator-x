@@ -109,7 +109,17 @@ body {
 .operation-holder {
     border-bottom: 2px solid black;
     flex: .5;
+    /* overflow: scroll; */
 }
+
+/* .operation-holder::-webkit-scrollbar {
+    height: 5px;
+    background-color: white;
+}
+
+.operation-holder::-webkit-scrollbar-thumb {
+    background-color: red;
+} */
 
 .result-holder {
     font-size: 1.6rem;
