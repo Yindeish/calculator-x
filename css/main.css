@@ -104,26 +104,25 @@ body {
     justify-content: end;
     width: 100%;
     padding: .2em 0em;
+    overflow: scroll;
 }
 
-.operation-holder {
+.screen > div > div {
+    width: fit-content;
+    height: 100%;
+}
+
+.screen > div:first-child {
     border-bottom: 2px solid black;
     flex: .5;
-    /* overflow: scroll; */
 }
 
-/* .operation-holder::-webkit-scrollbar {
-    height: 5px;
-    background-color: white;
-}
-
-.operation-holder::-webkit-scrollbar-thumb {
-    background-color: red;
-} */
-
-.result-holder {
-    font-size: 1.6rem;
+.screen > div:last-child {
     flex: .3;
+}
+
+.screen .result-holder {
+    font-size: 1.6rem;
 }
 
 .keys {

@@ -31,16 +31,64 @@ class Calculator {
         console.log('computing..');
 
         // Getting the operand before an operator ...
-        const operandBeforeOperatorRegExp = /(\d{1,})[\W]/;
-        const operandBeforeOperator = this.operationHolder.textContent.match(operandBeforeOperatorRegExp);; 
-        this.precedingOperand = operandBeforeOperator[1];
+        let operandBeforeOperatorRegExp = /(\d{1,})[\/\*\+-]/;
+        const dotOperandBeforeOperatorRegExp = /\./;
+        let dotOperandBeforeOperator = this.operationHolder.textContent.match(dotOperandBeforeOperatorRegExp)
+
+        const dotOperandAfterOperatorRegExp = /\./;
+        let dotOperandAfterOperator = [...this.operationHolder.textContent].reverse().join('').match(dotOperandAfterOperatorRegExp);
+
+        let operandBeforeOperator = this.operationHolder.textContent.match(operandBeforeOperatorRegExp);
+        if( dotOperandBeforeOperator && !dotOperandAfterOperator ) {
+            console.log('theres a dot for operand before  operator')
+            // console.log('matched a dot for operandBeforeOperator')
+            operandBeforeOperatorRegExp = /\d{1,}?[\.]\d{1,}[\/\*\+-]/;
+
+            operandBeforeOperator = this.operationHolder.textContent.match(operandBeforeOperatorRegExp)
+            console.log(operandBeforeOperator);
+            this.precedingOperand = parseFloat(operandBeforeOperator[0].slice(0, operandBeforeOperator[0].length-1));
+            console.log(this.precedingOperand);
+        }
+
+        operandBeforeOperator = this.operationHolder.textContent.match(operandBeforeOperatorRegExp);
+        if( !dotOperandBeforeOperator ) {
+            // console.log('theres no dot for operand before operator');
+            this.precedingOperand = operandBeforeOperator[1];
+        }
 
         // Getting the operand after an operator ...
-        const operandAfterOperatorRegExp = /[\W](\d{1,})/;
-        const operandAfterOperator = this.operationHolder.textContent.match(operandAfterOperatorRegExp);; 
-        this.followingOperand = parseFloat(operandAfterOperator[1]);
+        // Matching a whole numer or a floatimg point number
+        let operandAfterOperatorRegExp = /[\/\*\+-](\d{1,})/;
 
-        const operatorsRegExp = /\W/;
+        let operandAfterOperator = this.operationHolder.textContent.match(operandAfterOperatorRegExp);
+
+        // If precedigng and following operands have a dot in them
+        if( dotOperandAfterOperator && dotOperandBeforeOperator ) {
+            
+            // console.log("there's dot for operandAfterOperator");
+            operandAfterOperatorRegExp = /[\/\*\+-]\d{1,}?[\.]\d{1,}/;
+            
+            operandAfterOperator = this.operationHolder.textContent.match(operandAfterOperatorRegExp);
+            console.log(operandAfterOperator, operandAfterOperator[0].slice(1));
+            this.followingOperand = parseFloat(operandAfterOperator[0].slice(1));
+            console.log(this.followingOperand, this.precedingOperand);
+        }
+        
+       if( !(dotOperandAfterOperator && dotOperandBeforeOperator) ) {
+
+        // console.log("there's no dot for both operands");
+        this.followingOperand = parseFloat(operandAfterOperator[1]);
+        // console.log(this.followingOperand);
+       }
+
+       if( (dotOperandAfterOperator && dotOperandBeforeOperator)  ) {
+        // console.log("there's dot for both operands");
+       }
+       if( !dotOperandBeforeOperator  ) {
+        console.log("there's no dot for operandBeforeOperator -new");
+       }
+
+        const operatorsRegExp = /[\/\*\+-]/;
         const foundAnOperator =  this.operationHolder.textContent.match(operatorsRegExp);
 
         const operatorsAreMoreThanOne = this.areOperatorsMoreThanOne();
@@ -59,7 +107,8 @@ class Calculator {
 
             // Get the new operand from the back of the operation string
             const reversedOperation = [...this.operationHolder.textContent].reverse().join('');
-            const newFollowingOperandRegExp = /\d{1,}/;
+            // Matching a whole numer or a floatimg point number
+            const newFollowingOperandRegExp = /[\/\*\+-](\d{1,})/ || /[\/\*\+-]\d{1,}?[\.]\d{1,}/;
             const newFollowingOperand = reversedOperation.match(newFollowingOperandRegExp);
 
             // Reversed the matched operand back and coereced it to a string
@@ -82,16 +131,20 @@ class Calculator {
     }
 
     getAnotherOperator(hook) {
-        const anotherOperatorRegExp = /\W/;
+        const anotherOperatorRegExp = /[\/\*\+-]/;
         const reversedOperation = hook;
         const anotherOperator = reversedOperation.match(anotherOperatorRegExp);
 
         return anotherOperator[0];
     }
 
+    dotIsMoreThanOne() {
+
+    }
+
     areOperatorsMoreThanOne() {
         let operatorsAreMoreThanOneArray = [];
-        const operatorsAreMoreThanOneRegExp = /\W+/g;
+        const operatorsAreMoreThanOneRegExp = /[\/\*\+-]/g;
         const operatorsAreMoreThanOne = this.operationHolder.textContent.matchAll(operatorsAreMoreThanOneRegExp);
         for( let matchedOperator of operatorsAreMoreThanOne ) {
             operatorsAreMoreThanOneArray.push(matchedOperator);
@@ -101,11 +154,13 @@ class Calculator {
     }
 
     operate(operator) {
+        console.log(this.precedingOperand, this.followingOperand);
         operator == '/' ? this.result = this.precedingOperand / this.followingOperand : this.result = this.result;
         operator == '*' ? this.result = this.precedingOperand * this.followingOperand : this.result = this.result;
         // parseFloat() was used as the + may concatenate the operands but other operators coerce the operands to numbers
         operator == '+' ? this.result = parseFloat(this.precedingOperand) + parseFloat(this.followingOperand) : this.result = this.result;
-        operator == '-' ? this.result = this.precedingOperand - this.followingOperand : this.result = this.result;
+        // parseFloat() was used as the - may concatenate the operands but other operators coerce the operands to numbers
+        operator == '-' ? this.result = parseFloat(this.precedingOperand) - parseFloat(this.followingOperand) : this.result = this.result;
 
         this.resultHolder.textContent = this.result;
     }
@@ -131,8 +186,12 @@ class Calculator {
 
                 // Ensuring that the delete-btn content is not rendered in the screen when clicked
                 if( btnClasses.contains('delete-btn') ) {
-                    console.log('deleted')
-                    return;
+
+                    const operation = [...this.operationHolder.textContent];
+                    operation.pop();
+                    this.operationHolder.textContent = operation.join('');
+                    
+                    this.updateApp();
                 } 
 
                 // Ensuring that the equality-sign content is not rendered in the screen when clicked
@@ -143,7 +202,12 @@ class Calculator {
 
                 // Ensuring that the ac btn content is not rendered in the screen when clicked
                 if( btnClasses.contains('ac') ) {
-                    console.log('ac');
+
+                    this.result = '';
+                    this.operationHolder.textContent = '';
+                    this.resultHolder.textContent = '';
+
+                    this.updateApp();
                 }
 
                 // Ensuring that the pie content is not rendered in the screen when clicked
