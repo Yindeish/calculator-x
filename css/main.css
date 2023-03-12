@@ -99,30 +99,12 @@ body {
     padding: 0em;
 }
 
-.screen > div {
-    align-items: flex-end;
-    justify-content: end;
+.screen input {
     width: 100%;
-    padding: .2em 0em;
-    overflow: scroll;
-}
-
-.screen > div > div {
-    width: fit-content;
     height: 100%;
-}
-
-.screen > div:first-child {
-    border-bottom: 2px solid black;
-    flex: .5;
-}
-
-.screen > div:last-child {
-    flex: .3;
-}
-
-.screen .result-holder {
-    font-size: 1.6rem;
+    color: black;
+    font-size: 3rem;
+    text-align: right;
 }
 
 .keys {

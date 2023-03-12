@@ -7,6 +7,7 @@
     <title>Calculator</title>
     <link rel="stylesheet" href="./css/main.css">
     <!-- <script src="./scripts/index.js" defer></script> -->
+    <script src="./scripts/main.js" defer></script>
 </head>
 <body class="f-centralize-block-xy">
     <div class="app f-centralize-block-xy">
@@ -14,12 +15,7 @@
         <span class="before"></span>
         <span class="before"></span>
         <div class="screen f-centralize-block-xy">
-            <div class="f-centralize-block-xy">
-                <div id="operation-holder" class="operation-holder f-centralize-block-xy"></div>
-            </div>
-            <div class="f-centralize-block-xy">
-                <div id="result-holder" class="result-holder f-centralize-block-xy"></div>
-            </div>
+            <input type="text" disabled>
         </div>
         <div class="keys">
             <div class="special-operators">
@@ -44,19 +40,18 @@
                 <div class="three btn number">3</div>
                 <div class="zero btn number">0</div>
                 <div class="decimal-point btn number">.</div>
-                <butto class="delete-btn btn">del</button>
+                <div class="delete-btn btn">del</div>
             </div>
             <div class="arithmetric-operators">
                 <div class="division btn arith f-centralize-block-xy">/</div>
-                <div class="open-brace btn arith f-centralize-block-xy">(</div>
+                <div class="open-brace btn brace f-centralize-block-xy">(</div>
                 <div class="multiplication btn arith f-centralize-block-xy">*</div>
-                <div class="close-brace btn arith f-centralize-block-xy">)</div>
+                <div class="close-brace brace btn f-centralize-block-xy">)</div>
                 <div class="subtraction btn arith f-centralize-block-xy">-</div>
                 <div class="equality-sign btn arith f-centralize-block-xy">=</div>
                 <div class="addition btn arith f-centralize-block-xy">+</div>
             </div>
         </div>
     </div>
-    <script src="./scripts/index.js"></script>
 </body>
 </html>

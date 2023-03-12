@@ -176,7 +176,7 @@ class Calculator {
     }
 
     run() {
-        // updateing the app before running it
+        // updating the app before running it
         this.updateApp();
 
         this.keys.forEach(key => {
